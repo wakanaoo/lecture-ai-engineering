@@ -3,7 +3,7 @@ import json
 import urllib.request
 
 # あなたの FastAPI サーバのエンドポイントに書き換えてください
-FASTAPI_URL = "https://2f3f-34-87-136-98.ngrok-free.app/predict"
+FASTAPI_URL = "https://0c3b-34-87-136-98.ngrok-free.app/predict"
 
 def lambda_handler(event, context):
     try:
