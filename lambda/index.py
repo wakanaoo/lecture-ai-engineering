@@ -3,7 +3,7 @@ import urllib.request
 
 def lambda_handler(event, context):
     # ここに、あなたが Colab で立てた FastAPI の URL を貼り付けてください
-    url = "https://20bb-34-143-186-188.ngrok-free.app/predict"  # ← ここを正しいURLに修正
+    url = "https://e5bc-34-143-186-188.ngrok-free.app/predict"  # ← ここを正しいURLに修正
 
     try:
         # Lambda に送られてきた JSON から本文を取り出す
