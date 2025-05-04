@@ -12,7 +12,7 @@ def lambda_handler(event, context):
         message = body.get('message', '')
         
         # FastAPI に送信するデータを整形
-        payload = json.dumps({"text": message}).encode("utf-8")
+        payload = json.dumps({"message": message}).encode("utf-8")
         headers = {"Content-Type": "application/json"}
         
         # リクエストを作成して送信
