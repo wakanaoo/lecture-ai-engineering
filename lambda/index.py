@@ -1,25 +1,27 @@
+# lambda/index.py
 import json
 import urllib.request
 
+# あなたの FastAPI サーバのエンドポイントに書き換えてください
+FASTAPI_URL = "https://xxx.ngrok-free.app/predict"
+
 def lambda_handler(event, context):
-    # ここに、あなたが Colab で立てた FastAPI の URL を貼り付けてください
-    url = "https://a91d-34-87-136-98.ngrok-free.app/predict"  # ← ここを正しいURLに修正
-
     try:
-        # Lambda に送られてきた JSON から本文を取り出す
+        # リクエストボディを取得
         body = json.loads(event['body'])
-        message = body['message']  # JSONのキーは 'message' を想定
-
-        input_data = {"text": message}
-        req = urllib.request.Request(
-            url,
-            data=json.dumps(input_data).encode("utf-8"),
-            headers={"Content-Type": "application/json"}
-        )
+        message = body.get('message', '')
         
-        with urllib.request.urlopen(req) as res:
-            response_body = res.read().decode("utf-8")
-
+        # FastAPI に送信するデータを整形
+        payload = json.dumps({"text": message}).encode("utf-8")
+        headers = {"Content-Type": "application/json"}
+        
+        # リクエストを作成して送信
+        req = urllib.request.Request(FASTAPI_URL, data=payload, headers=headers)
+        with urllib.request.urlopen(req) as response:
+            response_body = response.read().decode("utf-8")
+            result = json.loads(response_body)
+        
+        # FastAPI からの応答を構成
         return {
             "statusCode": 200,
             "headers": {
@@ -28,7 +30,10 @@ def lambda_handler(event, context):
                 "Access-Control-Allow-Headers": "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
                 "Access-Control-Allow-Methods": "OPTIONS,POST"
             },
-            "body": response_body
+            "body": json.dumps({
+                "success": True,
+                "response": result.get("response", "")
+            })
         }
 
     except Exception as e:
